@@ -9,6 +9,10 @@ local is_pipenv = function()
     return vim.fn.filereadable("Pipfile") ~= 0
 end
 
+local is_uv = function()
+    return vim.fn.filereadable("uv.lock") ~= 0
+end
+
 --- Returns a list of signs to be placed.
 M.sign_list = common.sign_list
 
@@ -48,6 +52,8 @@ M.load = function(callback)
     end
     if is_pipenv() then
         cmd = "pipenv run " .. cmd
+    elseif is_uv() then
+        cmd = "uv run " .. cmd
     end
 
     local stdout = ""
